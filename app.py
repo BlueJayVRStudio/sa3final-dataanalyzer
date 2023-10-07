@@ -10,7 +10,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 import psycopg2
 
-
 def get_env_variable(name):
     try:
         return os.environ[name]
