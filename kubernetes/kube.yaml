@@ -68,7 +68,6 @@ metadata:
                       'f:valueFrom':
                         .: {}
                         'f:configMapKeyRef': {}
-                  'f:image': {}
                   'f:imagePullPolicy': {}
                   'f:name': {}
                   'f:resources': {}
@@ -82,6 +81,29 @@ metadata:
       manager: GoogleCloudConsole
       operation: Update
       time: '2023-10-07T23:12:19Z'
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:gcb-build-id': {}
+            'f:kubectl.kubernetes.io/last-applied-configuration': {}
+          'f:labels':
+            'f:app.kubernetes.io/version': {}
+        'f:spec':
+          'f:template':
+            'f:metadata':
+              'f:annotations':
+                'f:gcb-build-id': {}
+              'f:labels':
+                'f:app.kubernetes.io/version': {}
+            'f:spec':
+              'f:containers':
+                'k:{"name":"github-bluejayvrstudio-sa3final-dataanalyzer-1"}':
+                  'f:image': {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: '2023-10-08T19:49:33Z'
     - apiVersion: apps/v1
       fieldsType: FieldsV1
       fieldsV1:
@@ -115,7 +137,7 @@ metadata:
       manager: kube-controller-manager
       operation: Update
       subresource: status
-      time: '2023-10-07T23:17:36Z'
+      time: '2023-10-08T19:52:56Z'
   name: dataanalyzer
   namespace: default
 spec:
@@ -207,6 +229,18 @@ metadata:
     - apiVersion: autoscaling/v2
       fieldsType: FieldsV1
       fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:gcb-build-id': {}
+            'f:kubectl.kubernetes.io/last-applied-configuration': {}
+          'f:labels':
+            'f:app.kubernetes.io/version': {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: '2023-10-08T19:49:34Z'
+    - apiVersion: autoscaling/v2
+      fieldsType: FieldsV1
+      fieldsV1:
         'f:status':
           'f:conditions':
             .: {}
@@ -238,7 +272,7 @@ metadata:
       manager: vpa-recommender
       operation: Update
       subresource: status
-      time: '2023-10-07T23:18:36Z'
+      time: '2023-10-08T19:54:26Z'
   name: dataanalyzer-hpa-cinc
   namespace: default
 spec:
@@ -261,6 +295,7 @@ kind: Service
 metadata:
   annotations:
     cloud.google.com/neg: '{"ingress":true}'
+  generateName: dataanalyzer-
   labels:
     app: dataanalyzer
   managedFields:
@@ -268,14 +303,18 @@ metadata:
       fieldsType: FieldsV1
       fieldsV1:
         'f:metadata':
+          'f:generateName': {}
           'f:labels':
             .: {}
             'f:app': {}
+            'f:app.kubernetes.io/managed-by': {}
+            'f:app.kubernetes.io/name': {}
+            'f:app.kubernetes.io/version': {}
         'f:spec':
           'f:internalTrafficPolicy': {}
           'f:ports':
             .: {}
-            'k:{"port":80,"protocol":"TCP"}':
+            'k:{"port":5051,"protocol":"TCP"}':
               .: {}
               'f:port': {}
               'f:protocol': {}
@@ -285,19 +324,19 @@ metadata:
           'f:type': {}
       manager: GoogleCloudConsole
       operation: Update
-      time: '2023-10-07T23:13:23Z'
-  name: dataanalyzer-service
+      time: '2023-10-07T23:34:56Z'
+  name: dataanalyzer-klkmd
   namespace: default
 spec:
-  clusterIP: 34.118.237.200
+  clusterIP: 34.118.238.31
   clusterIPs:
-    - 34.118.237.200
+    - 34.118.238.31
   internalTrafficPolicy: Cluster
   ipFamilies:
     - IPv4
   ipFamilyPolicy: SingleStack
   ports:
-    - port: 80
+    - port: 5051
       protocol: TCP
       targetPort: 5051
   selector:
