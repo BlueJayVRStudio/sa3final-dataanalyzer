@@ -60,7 +60,7 @@ def get_dimensions_detail(details):
     # print(type(toReturn))
     return toReturn
 
-## ANALYSIS: data processing entry
+## ANALYSIS: data processing entry point
 def ArtpiecesJson(rows):
     tempList = []
     for i in rows:
@@ -93,4 +93,4 @@ if __name__ == "__main__":
     print("hello world!")
     datacollector_addr = "http://127.0.0.1:5050/"
     app.run(port=5051)
-    
+    # test commit
