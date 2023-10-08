@@ -56,9 +56,9 @@ def get_dimensions_detail(details):
             toReturn.append({ 'part_name': i['clarification'], 'processed' : "Volume: " + str(i['depth_cm'] * i['width_cm'] * i['height_cm']) + " cm^3" } )
         else:
             toReturn.append({ 'part_name': i['clarification'], 'processed' : "Area: " + str(i['width_cm'] * i['height_cm']) + " cm^2" } )
-        toReturn.append(i)
 
-    return json.dumps(toReturn)
+    # print(type(toReturn))
+    return toReturn
 
 ## ANALYSIS: data processing entry
 def ArtpiecesJson(rows):
