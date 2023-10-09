@@ -45,7 +45,7 @@ class analysis_functions:
         tempList = []
         for i in rows:
             data = { 
-                'ID': i.id,
+                'id': i.id,
                 'name': i.name,
                 'image_link': self.get_iif(i.image_id),
                 'dimensions_detail': self.get_dimensions_detail(i.dimensions_detail)
