@@ -41,47 +41,67 @@ class Artpieces(db.Model):
     image_id = db.Column(db.Text, nullable = True)
     dimensions_detail = db.Column(db.Text, nullable = True)
 
-## ANALYSIS: returns API address for the thumbnail image given an art work id
-def get_iif(identifier):
-    return f"https://www.artic.edu/iiif/2/{identifier}/full/843,/0/default.jpg"
+## ANALYSIS: analysis functions
+class analysis_functions:
+    ## ANALYSIS: returns API address for the thumbnail image given an art work id
+    def get_iif(self, identifier):
+        return f"https://www.artic.edu/iiif/2/{identifier}/full/843,/0/default.jpg"
 
-## ANALYSIS: returns list of parts of the artwork and their calculated volumes or areas
-def get_dimensions_detail(details):
-    # raise NotImplementedError
-    toReturn = []
-    for i in json.loads(details):
-        # print(type(i['depth_cm'])) # it's int
-        isVolume = True if i['depth_cm'] != 0 else False
-        if isVolume:
-            toReturn.append({ 'part_name': i['clarification'], 'processed' : "Volume: " + str(i['depth_cm'] * i['width_cm'] * i['height_cm']) + " cm^3" } )
-        else:
-            toReturn.append({ 'part_name': i['clarification'], 'processed' : "Area: " + str(i['width_cm'] * i['height_cm']) + " cm^2" } )
+    ## ANALYSIS: helper function
+    def get_volume_string(self, detail):
+        return str(detail['depth_cm'] * detail['width_cm'] * detail['height_cm'])
 
-    # print(type(toReturn))
-    return toReturn
+    ## ANALYSIS: helper function
+    def get_area_string(self, detail):
+        return str(detail['width_cm'] * detail['height_cm'])
 
-## ANALYSIS: data processing entry point
-def ArtpiecesJson(rows):
-    tempList = []
-    for i in rows:
-        data = { 
-            'id': i.id,
-            'name': i.name,
-            'image_link': get_iif(i.image_id),
-            'dimensions_detail': get_dimensions_detail(i.dimensions_detail)
-        }
-        tempList.append(data)
-    return json.dumps(tempList)
+    ## ANALYSIS: returns list of parts of the artwork and their calculated volumes or areas
+    def get_dimensions_detail(self, details):
+        # raise NotImplementedError
+        toReturn = []
+        for i in json.loads(details):
+            # print(type(i['depth_cm'])) # it's int
+            isVolume = True if i['depth_cm'] != 0 else False
+            if isVolume:
+                toReturn.append({ 'part_name': i['clarification'], 'processed' : "Volume: " + self.get_volume_string(i) + " cm^3" } )
+            else:
+                toReturn.append({ 'part_name': i['clarification'], 'processed' : "Area: " + self.get_area_string(i) + " cm^2" } )
+
+        # print(type(toReturn))
+        return toReturn
+
+    ## ANALYSIS: data processing entry point
+    def ArtpiecesJson(self, rows):
+        tempList = []
+        for i in rows:
+            data = { 
+                'id': i.id,
+                'name': i.name,
+                'image_link': self.get_iif(i.image_id),
+                'dimensions_detail': self.get_dimensions_detail(i.dimensions_detail)
+            }
+            tempList.append(data)
+        return json.dumps(tempList)
+
+AnalysisFunctions = analysis_functions()
 
 @app.route("/retrieve_records", methods=["GET"])
 def send_records():
     artworks = db.session.query(Artpieces).all()
     # process database output and send it out as JSON
-    return ArtpiecesJson(artworks)
+    return AnalysisFunctions.ArtpiecesJson(artworks)
 
-@app.route("/delete_records", methods=["GET"])
-def delete_records():
-    response = requests.get(datacollector_addr + "delete_records")
+@app.route("/delete_records/<mock>", methods=["GET"])
+def delete_records(mock):
+    if mock == "default":
+        response = requests.get(datacollector_addr + "delete_records")
+    else:
+        response = requests.get("http://127.0.0.1:5100/delete_records")
+
+    return "deleted! " + str(response.status_code)
+
+def delete_records_integration_test():
+    response = requests.get("http://127.0.0.1:5100/" + "delete_records")
     return "deleted! " + str(response.status_code)
 
 @app.route("/scrape", methods=["GET"])

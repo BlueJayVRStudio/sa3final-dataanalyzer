@@ -45,5 +45,9 @@ COPY . .
 # Expose the port that the application listens on.
 EXPOSE 5051
 
+# Run tests!
+RUN pytest tests.py
+RUN pytest integration_tests.py
+
 # Run the application.
 CMD gunicorn 'app:app' --bind=0.0.0.0:5051
