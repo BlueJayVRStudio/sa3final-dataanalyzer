@@ -17,25 +17,18 @@ def get_env_variable(name):
         message = f"environment variable '{name}' not set."
         raise Exception(message)
 
-try:
-    POSTGRES_URL = get_env_variable("POSTGRES_URL")
-    POSTGRES_USER = get_env_variable("POSTGRES_USER")
-    POSTGRES_PW = get_env_variable("POSTGRES_PW")
-    POSTGRES_DB = get_env_variable("POSTGRES_DB")
-    AIC_API = "https://api.artic.edu/api/v1/artworks"
-    DB_URL = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
-    datacollector_addr = "http://34.118.228.146:5050/"
+POSTGRES_URL = get_env_variable("POSTGRES_URL")
+POSTGRES_USER = get_env_variable("POSTGRES_USER")
+POSTGRES_PW = get_env_variable("POSTGRES_PW")
+POSTGRES_DB = get_env_variable("POSTGRES_DB")
+AIC_API = "https://api.artic.edu/api/v1/artworks"
+DB_URL = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
+datacollector_addr = "http://34.118.228.146:5050/"
 
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 
-    db = SQLAlchemy(app)
-except:
-    app = Flask(__name__)
-    engine = db.create_engine("sqlite:///testing.sqlite")
-    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///testing.sqlite"
-
-    db = SQLAlchemy(app)
+db = SQLAlchemy(app)
 
 
 datacollector_addr = "http://34.118.228.146:5050/"

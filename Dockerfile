@@ -47,7 +47,7 @@ EXPOSE 5051
 
 # Run tests!
 RUN pytest tests.py
-RUN pytest integration_tests.py
+RUN python3 integration_tests.py
 
 # Run the application.
 CMD gunicorn 'app:app' --bind=0.0.0.0:5051
