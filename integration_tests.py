@@ -9,12 +9,12 @@ def test_server_client():
 
     try:
         response = delete_records("http://127.0.0.1:5100/")
-        result = "deleted! " + str(response.status_code)
+        result = response.text
     except:
         result = "fail"
     
     server.kill()
-    assert (result == "deleted! 200")
+    assert (result == "tested deletion! success!")
 
 if __name__ == "__main__":
     test_server_client()
