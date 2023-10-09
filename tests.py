@@ -2,9 +2,13 @@
 
 import unittest
 from unittest.mock import MagicMock
+from unittest.mock import Mock
+from flask import Flask, request
+from flask_sqlalchemy import SQLAlchemy
+
 # import analysis functions
-from app import analysis_functions
-from app import Artpieces
+from AnalyzerFunctions import Artpieces
+from AnalyzerFunctions import analysis_functions
 
 class TestExample(unittest.TestCase):
     def setUp(self):
@@ -60,9 +64,9 @@ class TestExample(unittest.TestCase):
 
     def test_json_generator(self):
         test_artpieces = [
-            Artpieces(id=1, name="piece1"),
-            Artpieces(id=2, name="piece2"),
-            Artpieces(id=3, name="piece3")
+            Artpieces(id=1, name="piece1", image_id = None, dimensions_detail = None),
+            Artpieces(id=2, name="piece2", image_id = None, dimensions_detail = None),
+            Artpieces(id=3, name="piece3", image_id = None, dimensions_detail = None)
         ]
         self.AnalysisFunctions.get_iif = MagicMock(return_value="http://some-link")
         self.AnalysisFunctions.get_dimensions_detail = MagicMock(return_value="some physical description of the artwork")

@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 from subprocess import Popen
-from app import delete_records
+from AnalyzerFunctions import delete_records
 import time
 
 def test_server_client():
-    server = Popen(["python3","MockDatacollector.py"])
+    server = Popen(["python3", "MockDatacollector.py"])
     time.sleep(5)
+
     try:
-        result = delete_records("test")
+        response = delete_records("http://127.0.0.1:5100/")
+        result = "deleted! " + str(response.status_code)
     except:
         result = "fail"
     
