@@ -10,29 +10,35 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 import psycopg2
 
-if __name__ == "__main__":
-    def get_env_variable(name):
-        try:
-            return os.environ[name]
-        except KeyError:
-            message = f"environment variable '{name}' not set."
-            raise Exception(message)
+def get_env_variable(name):
+    try:
+        return os.environ[name]
+    except KeyError:
+        message = f"environment variable '{name}' not set."
+        raise Exception(message)
 
+try:
     POSTGRES_URL = get_env_variable("POSTGRES_URL")
     POSTGRES_USER = get_env_variable("POSTGRES_USER")
     POSTGRES_PW = get_env_variable("POSTGRES_PW")
     POSTGRES_DB = get_env_variable("POSTGRES_DB")
     AIC_API = "https://api.artic.edu/api/v1/artworks"
-
-
     DB_URL = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
+except:
+    POSTGRES_URL = ""
+    POSTGRES_USER = ""
+    POSTGRES_PW = ""
+    POSTGRES_DB = ""
+    AIC_API = ""
+    DB_URL = ""
 
-    datacollector_addr = "http://34.118.228.146:5050/"
 
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
+datacollector_addr = "http://34.118.228.146:5050/"
 
-    db = SQLAlchemy(app)
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
+
+db = SQLAlchemy(app)
 
 class Artpieces(db.Model):
     __tablename__ = 'artpieces'
